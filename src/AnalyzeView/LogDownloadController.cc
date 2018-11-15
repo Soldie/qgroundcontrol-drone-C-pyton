@@ -29,7 +29,6 @@
 #include <QBitArray>
 #include <QtCore/qmath.h>
 
-#define kTimeOutMilliseconds 500
 #define kGUIRateMilliseconds 17
 #define kTableBins           512
 #define kChunkSize           (kTableBins * MAVLINK_MSG_LOG_DATA_FIELD_DATA_LEN)
@@ -197,7 +196,7 @@ LogDownloadController::_logEntry(UASInterface* uas, uint32_t time_utc, uint32_t 
         _receivedAllEntries();
     } else {
         //-- Reset timer
-        _timer.start(kTimeOutMilliseconds);
+        _timer.start(qgcApp()->toolbox()->settingsManager()->appSettings()->logDownloadTimeout()->rawValue().toInt());
     }
 }
 
@@ -317,7 +316,7 @@ LogDownloadController::_logData(UASInterface* uas, uint32_t ofs, uint16_t id, ui
     }
 
     bool result = false;
-    uint32_t timeout_time = kTimeOutMilliseconds;
+    uint32_t timeout_time = qgcApp()->toolbox()->settingsManager()->appSettings()->logDownloadTimeout()->rawValue().toUInt();
     if(ofs <= _downloadData->entry->size()) {
         const uint32_t chunk = ofs / kChunkSize;
         if (chunk != _downloadData->current_chunk) {
@@ -408,7 +407,7 @@ LogDownloadController::_receivedAllData()
     if(_prepareLogDownload()) {
         //-- Request Log
         _requestLogData(_downloadData->ID, 0, _downloadData->chunk_table.size()*MAVLINK_MSG_LOG_DATA_FIELD_DATA_LEN);
-        _timer.start(kTimeOutMilliseconds);
+        _timer.start(qgcApp()->toolbox()->settingsManager()->appSettings()->logDownloadTimeout()->rawValue().toInt());
     } else {
         _resetSelection();
         _setDownloading(false);

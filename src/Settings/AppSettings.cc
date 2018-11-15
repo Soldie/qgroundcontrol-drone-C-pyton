@@ -41,6 +41,7 @@ const char* AppSettings::esriTokenName =                                "EsriTok
 const char* AppSettings::defaultFirmwareTypeName =                      "DefaultFirmwareType";
 const char* AppSettings::gstDebugName =                                 "GstreamerDebugLevel";
 const char* AppSettings::followTargetName =                             "FollowTarget";
+const char* AppSettings::logDownloadTimeoutName =                       "LogDownloadTimeout";
 
 const char* AppSettings::parameterFileExtension =   "params";
 const char* AppSettings::planFileExtension =        "plan";
@@ -85,6 +86,7 @@ AppSettings::AppSettings(QObject* parent)
     , _defaultFirmwareTypeFact              (nullptr)
     , _gstDebugFact                         (nullptr)
     , _followTargetFact                     (nullptr)
+    , _logDownloadTimeoutFact               (nullptr)
 {
     QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
     qmlRegisterUncreatableType<AppSettings>("QGroundControl.SettingsManager", 1, 0, "AppSettings", "Reference only");
@@ -427,4 +429,13 @@ Fact* AppSettings::followTarget(void)
     }
 
     return _followTargetFact;
+}
+
+Fact* AppSettings::logDownloadTimeout(void)
+{
+    if (!_logDownloadTimeoutFact) {
+        _logDownloadTimeoutFact = _createSettingsFact(logDownloadTimeoutName);
+    }
+
+    return _logDownloadTimeoutFact;
 }

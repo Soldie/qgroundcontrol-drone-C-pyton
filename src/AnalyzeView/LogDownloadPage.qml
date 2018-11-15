@@ -13,6 +13,8 @@ import QtQuick.Dialogs      1.2
 import QtQuick.Layouts      1.2
 
 import QGroundControl               1.0
+import QGroundControl.FactSystem    1.0
+import QGroundControl.FactControls  1.0
 import QGroundControl.Palette       1.0
 import QGroundControl.Controls      1.0
 import QGroundControl.Controllers   1.0
@@ -197,6 +199,16 @@ AnalyzePage {
                     width:      _butttonWidth
                     enabled:    logController.requestingList || logController.downloadingLogs
                     onClicked:  logController.cancel()
+                }
+
+                QGCLabel {
+                    text:       "Timeout"
+                }
+                FactTextField {
+                    fact:           _timeoutFact
+                    width:          _butttonWidth
+                    enabled:        !logController.requestingList && !logController.downloadingLogs
+                    property Fact _timeoutFact: QGroundControl.settingsManager.appSettings.logDownloadTimeout
                 }
             } // Column - Buttons
         } // RowLayout
