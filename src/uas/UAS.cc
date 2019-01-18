@@ -290,6 +290,22 @@ void UAS::receiveMessage(mavlink_message_t message)
             processParamValueMsg(message, parameterName,rawValue,paramVal);
          }
             break;
+        case MAVLINK_MSG_ID_PACKED_PARAM_VALUES:
+        {
+            mavlink_packed_param_values_t rawValue;
+            mavlink_msg_packed_param_values_decode(&message, &rawValue);
+
+            //QByteArray bytes(rawValue.param_id, MAVLINK_MSG_PARAM_VALUE_FIELD_PARAM_ID_LEN);
+            // Construct a string stopping at the first NUL (0) character, else copy the whole
+            // byte array (max MAVLINK_MSG_PARAM_VALUE_FIELD_PARAM_ID_LEN, so safe)
+            //QString parameterName(bytes);
+            //mavlink_param_union_t paramVal;
+            //paramVal.param_float = rawValue.param_value;
+            //paramVal.type = rawValue.param_type;
+
+            //processParamValueMsg(message, parameterName,rawValue,paramVal);
+         }
+            break;
         case MAVLINK_MSG_ID_ATTITUDE_TARGET:
         {
             mavlink_attitude_target_t out;
